@@ -90,14 +90,14 @@
 #include <DMAChannel.h>
 
 #define C12880_NUM_CHANNELS 288 // Number of spectral channels (output)
-#define SPEC_TRG             11 // ADC signal trigger to microcontroller, needs to go to pin 11 (input)
-#define SPEC_ST              12 // Sensor start pulse from microcontroller (output)
-#define SPEC_CLK             23 // Sensor clock from microcontroller (output)
-#define SPEC_VIDEO           14 // Sensor signal, buffered, low impedance to microcontroller (input)
-#define SPEC_EOS             13 // Sensor End of Scan, to microcontroller (input)
-#define FLASH_TRIGGER        18 // Light on/off from microcontroller (output)
-#define LASER_TRIGGER        17 // Light on/off from microcontroller (input)
-#define INT_Pin              21 // Connect to SPEC_CLK to count clock cycles (input)
+#define SPEC_TRG             22 // ADC signal trigger to microcontroller, needs to go to pin 11 (input)
+#define SPEC_ST              21 // Sensor start pulse from microcontroller (output)
+#define SPEC_CLK             20 // Sensor clock from microcontroller (output)
+#define SPEC_VIDEO           41 // Sensor signal, buffered, low impedance to microcontroller (input)
+#define SPEC_EOS             23 // Sensor End of Scan, to microcontroller (input)
+#define FLASH_TRIGGER        18 // Light on/off from microcontroller (output) //not used yet
+#define LASER_TRIGGER        17 // Light on/off from microcontroller (input) //not used yet
+#define INT_Pin              24 // Connect to SPEC_CLK to count clock cycles (input)//not used yet
 // ----------------------------------------------------------
 // PWM pins can be 3,4,5,6,9,10,20,21,22,23,25,32 (for SPEC_CLK)
 // ADC pins can be 14,15,16,17,18,19,20,21,22,23,26,27,28, 29,30,31,A10,A11,A12,A13 (for SPEC_VIDEO)
@@ -332,13 +332,13 @@ void setCLK(uint16_t CLK_pin, uint32_t CLK_Frequency, float PWM_Duty, float PWM_
 //    extra readings can be used to determine ADC offset and noise
 void transmitSpectrum(uint16_t *data) {
   size_t i;
-  if (aPlotter) {
+  if (aPlotter) {//skipped
     for (i = 0; i < C12880_NUM_CHANNELS+88+1; i++) { 
       mySerial.printf("%d\n",data[i]); 
     }
     mySerial.write('\n');
   } else {
-    if (!verboseMode) {
+    if (!verboseMode) {//--also skipped
       for (i = 0; i < C12880_NUM_CHANNELS+88+1; i++) {
         mySerial.write( (byte *) &data[i], sizeof(data[i]));
       }
@@ -571,7 +571,7 @@ void loop(){
        bytesread = mySerial.readBytesUntil('\n', inBuff, 16); // Read from serial until CR is read or timeout exceeded
        inBuff[bytesread]='\0';
        String instruction = String(inBuff);
-       processInstruction(instruction);
+       processInstruction(instruction);//x will read spectrum
      }
   }
 
