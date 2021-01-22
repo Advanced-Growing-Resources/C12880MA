@@ -332,13 +332,13 @@ void setCLK(uint16_t CLK_pin, uint32_t CLK_Frequency, float PWM_Duty, float PWM_
 //    extra readings can be used to determine ADC offset and noise
 void transmitSpectrum(uint16_t *data) {
   size_t i;
-  if (aPlotter) {
+  if (aPlotter) {//skipped
     for (i = 0; i < C12880_NUM_CHANNELS+88+1; i++) { 
       mySerial.printf("%d\n",data[i]); 
     }
     mySerial.write('\n');
   } else {
-    if (!verboseMode) {
+    if (!verboseMode) {//--also skipped
       for (i = 0; i < C12880_NUM_CHANNELS+88+1; i++) {
         mySerial.write( (byte *) &data[i], sizeof(data[i]));
       }
@@ -571,7 +571,7 @@ void loop(){
        bytesread = mySerial.readBytesUntil('\n', inBuff, 16); // Read from serial until CR is read or timeout exceeded
        inBuff[bytesread]='\0';
        String instruction = String(inBuff);
-       processInstruction(instruction);
+       processInstruction(instruction);//x will read spectrum
      }
   }
 
